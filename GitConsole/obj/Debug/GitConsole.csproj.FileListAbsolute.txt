@@ -4,3 +4,8 @@ D:\Gabi\GitConsole\GitConsole\bin\Debug\GitConsole.pdb
 D:\Gabi\GitConsole\GitConsole\obj\Debug\GitConsole.csprojResolveAssemblyReference.cache
 D:\Gabi\GitConsole\GitConsole\obj\Debug\GitConsole.exe
 D:\Gabi\GitConsole\GitConsole\obj\Debug\GitConsole.pdb
+D:\Gabi\git\GitConsole\GitConsole\bin\Debug\GitConsole.exe.config
+D:\Gabi\git\GitConsole\GitConsole\obj\Debug\GitConsole.exe
+D:\Gabi\git\GitConsole\GitConsole\obj\Debug\GitConsole.pdb
+D:\Gabi\git\GitConsole\GitConsole\bin\Debug\GitConsole.exe
+D:\Gabi\git\GitConsole\GitConsole\bin\Debug\GitConsole.pdb
