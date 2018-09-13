@@ -13,6 +13,7 @@ namespace GitConsole
             Console.WriteLine("Hello Git!");
             Console.WriteLine("Hello Git modified1!");
             Console.WriteLine("Hello Git modified2!");
+            Console.WriteLine("Diff between stages and commited");
             Console.ReadLine();
         }
     }
