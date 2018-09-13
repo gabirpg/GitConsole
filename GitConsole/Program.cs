@@ -11,7 +11,8 @@ namespace GitConsole
         static void Main(string[] args)
         {
             Console.WriteLine("Hello Git!");
-            Console.WriteLine("Hello Git modified!");
+            Console.WriteLine("Hello Git modified1!");
+            Console.WriteLine("Hello Git modified2!");
             Console.ReadLine();
         }
     }
