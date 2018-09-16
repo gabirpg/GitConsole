@@ -17,6 +17,8 @@ namespace GitConsole
 
             Console.WriteLine("Commit for a new annotated tag!");
 
+            Console.WriteLine("Commit for a new lightway tag!");
+
             Console.ReadLine();
         }
     }
