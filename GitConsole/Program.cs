@@ -14,6 +14,9 @@ namespace GitConsole
             Console.WriteLine("Hello Git modified1!");
             Console.WriteLine("Hello Git modified2!");
             Console.WriteLine("Diff between stages and commited");
+
+            Console.WriteLine("Commit for a new annotated tag!");
+
             Console.ReadLine();
         }
     }
