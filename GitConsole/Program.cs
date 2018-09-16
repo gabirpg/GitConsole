@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GitConsole
 {
@@ -18,6 +14,8 @@ namespace GitConsole
             Console.WriteLine("Commit for a new annotated tag!");
 
             Console.WriteLine("Commit for a new lightway tag!");
+
+            Console.WriteLine("Commit to remove some unused namespaces on branch testing!");
 
             Console.ReadLine();
         }
