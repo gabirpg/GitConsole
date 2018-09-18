@@ -17,8 +17,6 @@ namespace GitConsole
 
             Console.WriteLine("Commit to remove some unused namespaces on branch testing!");
 
-            Console.WriteLine("Commit to remove some unused namespaces on branch testing!");
-
             Console.WriteLine("Another commit on branch testing!");
 
             Console.ReadLine();
