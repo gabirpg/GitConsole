@@ -9,6 +9,7 @@ namespace GitConsole
             Console.WriteLine("origin testing 1.0");
             Console.WriteLine("origin testing 2.0");
             Console.WriteLine("origin testing 3.0");
+            Console.WriteLine("origin testing 4.0");
 
             Console.ReadLine();
         }
