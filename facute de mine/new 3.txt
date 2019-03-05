@@ -1,0 +1,266 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Xaml;
+using System.Xaml.Schema;
+using UiPath.Studio.Plugin.Workflow.Services.Interfaces;
+using UiPath.Workflow.Diff;
+using UiPath.Studio.Plugin.Workflow.Extensions;
+
+namespace UiPath.Studio.Plugin.Workflow.WorkflowDiff
+{
+    internal class DiffViewModelAlgorithm
+    {
+        private static readonly IEnumerable<string> ExcludedModelNames = new[]
+        {
+            "Flowchart.StartNode",
+            "FlowStep",
+            "FlowStep.Next",
+            "Collection"
+        };
+
+        private readonly IActivityLoaderService _activityLoaderService;
+
+        private readonly IAttributeService _attributeService;
+
+        private readonly IActivityIconFinder _iconService;
+
+        private readonly IXamlLocalization _localizationService;
+
+        private readonly ISimpleMessageBoxService _messageBoxService;
+
+        private readonly Dictionary<WorkflowNode, WorkflowNodeViewModel> _nodesToViewModels = new Dictionary<WorkflowNode, WorkflowNodeViewModel>();
+
+        private readonly UiPath.Workflow.Diff.WorkflowDiff _workflowDiff;
+
+        public DiffViewModelAlgorithm(string leftFilePath, string rightFilePath,
+                                      ISimpleMessageBoxService messageBoxService, IXamlLocalization localizationService,
+                                      IActivityIconFinder iconService, IAttributeService attributeService,
+                                      IActivityLoaderService activityLoaderService)
+        {
+            _messageBoxService = messageBoxService;
+            _localizationService = localizationService;
+            _iconService = iconService;
+            _attributeService = attributeService;
+            _activityLoaderService = activityLoaderService;
+
+            _workflowDiff = new UiPath.Workflow.Diff.WorkflowDiff(leftFilePath, rightFilePath);
+
+            BuildViewModelsRecursive((null, null), (_workflowDiff.Left, _workflowDiff.Right), out var result);
+            LeftViewModel = result.LeftViewModel;
+            RightViewModel = result.RightViewModel;
+        }
+
+        public LeftWorkflowNodeViewModel LeftViewModel { get; }
+
+        public RightWorkflowNodeViewModel RightViewModel { get; }
+
+        public WorkflowNodeViewModel GetRelatedViewModel(LeftWorkflowNodeViewModel leftViewModel)
+        {
+            var relatedNode = _workflowDiff.GetRightByIdRef(leftViewModel.Node);
+            _nodesToViewModels.TryGetValue(relatedNode, out var rightViewModel);
+            return rightViewModel;
+        }
+
+        public WorkflowNodeViewModel GetRelatedViewModel(RightWorkflowNodeViewModel rightViewModel)
+        {
+            var relatedNode = _workflowDiff.GetLeftByIdRef(rightViewModel.Node);
+            _nodesToViewModels.TryGetValue(relatedNode, out var leftViewModel);
+            return leftViewModel;
+        }
+
+        private static bool IsNotBrowsableProperty(
+            (LeftWorkflowNodeViewModel LeftViewModels, RightWorkflowNodeViewModel RightViewModels) parents,
+            (LeftWorkflowNode Left, RightWorkflowNode Right) wfNodes,
+            out PropertyInfo propertyInfo)
+        {
+            propertyInfo = null;
+            return IsProperty(parents.LeftViewModels, wfNodes.Left, ref propertyInfo) && !propertyInfo.Browsable()
+                   || IsProperty(parents.RightViewModels, wfNodes.Right, ref propertyInfo) && !propertyInfo.Browsable();
+        }
+
+        private void BuildViewModelsRecursive(
+            (LeftWorkflowNodeViewModel LeftViewModels, RightWorkflowNodeViewModel RightViewModels) parents,
+            (LeftWorkflowNode Left, RightWorkflowNode Right) wfNodes,
+            out (LeftWorkflowNodeViewModel LeftViewModel, RightWorkflowNodeViewModel RightViewModel) viewModel,
+            bool canSkipNext = false, Type skipType = null)
+        {
+            if (ShouldExcludeModel(wfNodes.Left, wfNodes.Right))
+            {
+                for (var idx = 0; idx < wfNodes.Left.Children.Length; idx++)
+                {
+                    BuildViewModelsRecursive(parents, (wfNodes.Left.Children[idx], wfNodes.Right.Children[idx]), out viewModel);
+                }
+
+                viewModel = (null, null);
+                return;
+            }
+
+            var shouldSkipCurrent = IsNotBrowsableProperty(parents, wfNodes, out var propertyInfo);
+            var newViewModelPair = CreateSyncModelPair(parents, wfNodes);
+            foreach (var wfNode in wfNodes.Left.Children)
+            {
+                BuildViewModelsRecursive(newViewModelPair, (wfNode, wfNode.Right), out viewModel, propertyInfo != null, propertyInfo?.PropertyType);
+            }
+
+            var isChildViewModel = newViewModelPair.LeftViewModel.HasChildren;
+            if (SkipCurrentViewModel())
+            {
+                if (isChildViewModel)
+                {
+                    for (var idx = 0; idx < newViewModelPair.LeftViewModel.Children.Count; idx++)
+                    {
+                        parents.LeftViewModels?.Children.Add(newViewModelPair.LeftViewModel.Children[idx]);
+                        parents.RightViewModels?.Children.Add(newViewModelPair.RightViewModel.Children[idx]);
+                    }
+                    viewModel = (newViewModelPair.LeftViewModel.Children.First(), newViewModelPair.RightViewModel.Children.First());
+                    return;
+                }
+                for (var idx = 0; idx < newViewModelPair.LeftViewModel.Properties.Count; idx++)
+                {
+                    parents.LeftViewModels?.Properties.Add(newViewModelPair.LeftViewModel.Properties[idx]);
+                    parents.RightViewModels?.Properties.Add(newViewModelPair.RightViewModel.Properties[idx]);
+                }
+                viewModel = (newViewModelPair.LeftViewModel.Properties.First(), newViewModelPair.RightViewModel.Properties.First());
+                return;
+            }
+
+            if (ShouldExcludeViewModel(newViewModelPair.LeftViewModel, newViewModelPair.RightViewModel))
+            {
+                parents.LeftViewModels?.Properties.Add(newViewModelPair.LeftViewModel);
+                parents.RightViewModels?.Properties.Add(newViewModelPair.RightViewModel);
+                viewModel = newViewModelPair;
+                return;
+            }
+
+            parents.LeftViewModels?.Children.Add(newViewModelPair.LeftViewModel);
+            parents.RightViewModels?.Children.Add(newViewModelPair.RightViewModel);
+            viewModel = newViewModelPair;
+            return;
+
+            bool SkipCurrentViewModel()
+            {
+                var nodeViewModel = GetNotEmptyViewModel(newViewModelPair);
+                var hasDescendents = isChildViewModel ? nodeViewModel.HasChildren : nodeViewModel.HasProperties;
+                if(!hasDescendents)
+                {
+                    return false;
+                }
+
+                if (shouldSkipCurrent)
+                {
+                    return true;
+                }
+
+                string underlyingTypeName = null;
+                if (isChildViewModel)
+                {
+                    underlyingTypeName = nodeViewModel.XamlType?.UnderlyingType?.Name;
+                }
+                else
+                {
+                    if(nodeViewModel is LeftWorkflowNodeViewModel leftViewModel)
+                    {
+                        underlyingTypeName = leftViewModel.Properties.Last().XamlType?.UnderlyingType?.Name;
+                    }
+                }
+                if (underlyingTypeName == null)
+                {
+                    return false;
+                }
+
+                return canSkipNext && skipType.Name.StartsWith(underlyingTypeName);
+            }
+        }
+
+        private (LeftWorkflowNodeViewModel LeftViewModel, RightWorkflowNodeViewModel RightViewModel) CreateSyncModelPair(
+            (LeftWorkflowNodeViewModel LeftViewModels, RightWorkflowNodeViewModel RightViewModels) parents,
+            (LeftWorkflowNode Left, RightWorkflowNode Right) wfNodes)
+        {
+            var leftViewModel = new LeftWorkflowNodeViewModel(parents.LeftViewModels, wfNodes.Left, this,
+                                                              _messageBoxService, _localizationService, _iconService, _attributeService)
+            {
+                XamlType = GetXamlType(wfNodes.Left)
+            };
+            _nodesToViewModels.Add(leftViewModel.Node, leftViewModel);
+
+            var rightViewModel = new RightWorkflowNodeViewModel(parents.RightViewModels, wfNodes.Right, this,
+                                                                _messageBoxService, _localizationService, _iconService, _attributeService)
+            {
+                XamlType = GetXamlType(wfNodes.Right)
+            };
+            _nodesToViewModels.Add(rightViewModel.Node, rightViewModel);
+
+            leftViewModel.RightViewModel = rightViewModel;
+            rightViewModel.LeftViewModel = leftViewModel;
+
+            return (leftViewModel, rightViewModel);
+        }
+
+        private WorkflowNodeViewModel GetNotEmptyViewModel((LeftWorkflowNodeViewModel LeftViewModel, RightWorkflowNodeViewModel RightViewModel) viewModels)
+        {
+            return viewModels.LeftViewModel.IsEmpty ? (WorkflowNodeViewModel)viewModels.RightViewModel : viewModels.LeftViewModel;
+        }
+
+        private XamlType GetXamlType(WorkflowNode workflowNode)
+        {
+            if (workflowNode?.Type?.Namespace == null)
+            {
+                return null;
+            }
+
+            var typeArguments = workflowNode.TypeArguments.Select(typeArgument => new XamlTypeName(typeArgument.Namespace.NamespaceName, typeArgument.LocalName)).ToList();
+            return _activityLoaderService.GetXamlType(workflowNode.Type.NamespaceName, workflowNode.Type.LocalName, typeArguments);
+        }
+
+        private static bool IsProperty(WorkflowNodeViewModel viewModelParent, WorkflowNode model, ref PropertyInfo propertyInfo)
+        {
+            if (model.IsEmpty || model.Type == null)
+            {
+                return false;
+            }
+
+            var localName = model.Type.LocalName;
+            var substrings = localName.Split('.');
+            if (substrings.Length == 1)
+            {
+                return false;
+            }
+
+            var parentTypeName = viewModelParent?.XamlType?.UnderlyingType?.Name;
+            if (parentTypeName == null || !parentTypeName.StartsWith(substrings[0]))
+            {
+                return false;
+            }            
+
+            var property = viewModelParent.XamlType.UnderlyingType.GetProperty(substrings[1]);
+            if (property == null)
+            {
+                return false;
+            }
+
+            propertyInfo = property;
+            return true;
+        }
+
+        private static bool ShouldExcludeModel(WorkflowNode leftModel, WorkflowNode rightModel)
+        {
+            WorkflowNode node = leftModel;
+            if(leftModel.IsEmpty)
+            {
+                node = rightModel;
+            }
+            return ExcludedModelNames.Contains(node.Type?.LocalName);
+        }
+
+        private static bool ShouldExcludeViewModel(LeftWorkflowNodeViewModel leftViewModel, RightWorkflowNodeViewModel rightViewModel)
+        {
+            if (!leftViewModel.IsEmpty)
+            {
+                return !leftViewModel.IsSupportedModelType && !leftViewModel.HasSupportedTypeDescendants();
+            }
+            return !rightViewModel.IsSupportedModelType && !rightViewModel.HasSupportedTypeDescendants();
+        }
+    }
+}

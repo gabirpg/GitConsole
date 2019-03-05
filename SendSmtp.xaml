@@ -1,0 +1,21 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="SendSmtp" mva:VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="SendSmtp_1"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:ui="http://schemas.uipath.com/workflow/activities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Sequence DisplayName="SendSmtp" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <ui:SendMail Bcc="{x:Null}" Body="{x:Null}" Cc="{x:Null}" Email="{x:Null}" From="{x:Null}" MailMessage="{x:Null}" Name="{x:Null}" Password="{x:Null}" Port="{x:Null}" Server="{x:Null}" Subject="{x:Null}" TimeoutMS="{x:Null}" To="{x:Null}" DisplayName="Send SMTP Mail Message" EnableSSL="True" IsBodyHtml="False" SecureConnection="Auto">
+      <ui:SendMail.Files>
+        <scg:List x:TypeArguments="InArgument(x:String)" Capacity="0" />
+      </ui:SendMail.Files>
+      <sap2010:WorkflowViewState.IdRef>SendMail_2</sap2010:WorkflowViewState.IdRef>
+    </ui:SendMail>
+    <sads:DebugSymbol.Symbol>dyZDOlxkb2N1bWVudGUgcHJvaWVjdGVcUUFcU2VuZFNtdHAueGFtbAI5A0EOAgEBOgU/EwIBAg==</sads:DebugSymbol.Symbol>
+  </Sequence>
+</Activity>

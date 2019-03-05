@@ -1,0 +1,78 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Main" mva:VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="Main_1"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:ui="http://schemas.uipath.com/workflow/activities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ui:ForEach x:TypeArguments="x:Object" CurrentIndex="{x:Null}" DisplayName="For each" sap2010:WorkflowViewState.IdRef="ForEach`1_4" Values="[expectedValues]">
+    <ui:ForEach.Body>
+      <ActivityAction x:TypeArguments="x:Object">
+        <ActivityAction.Argument>
+          <DelegateInArgument x:TypeArguments="x:Object" Name="item" />
+        </ActivityAction.Argument>
+        <Sequence DisplayName="Body" sap2010:WorkflowViewState.IdRef="Sequence_74">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="ui:GenericValue" Name="expectedValue" />
+            <Variable x:TypeArguments="ui:GenericValue" Name="elementNotPresent" />
+          </Sequence.Variables>
+          <TryCatch DisplayName="Try catch" sap2010:WorkflowViewState.IdRef="TryCatch_3">
+            <TryCatch.Try>
+              <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Check group" sap2010:WorkflowViewState.IdRef="GetValue_57">
+                <ui:GetValue.Target>
+                  <ui:Target Element="element1" TimeoutMS="300" InformativeScreenshot="ea8fb373c4055eda739fde4115001074" Selector="[&quot;&lt;wnd app='uistudio.exe' cls='HwndWrapper*' idx='1' /&gt;&lt;ctrl name='&quot; + item.ToString + &quot;' role='push button' /&gt;&quot;]" WaitForReady="INTERACTIVE">
+                    <ui:Target.ClippingRegion>
+                      <ui:Region Rectangle="3, 3, -3, -3" />
+                    </ui:Target.ClippingRegion>
+                  </ui:Target>
+                </ui:GetValue.Target>
+                <ui:GetValue.Value>
+                  <OutArgument x:TypeArguments="ui:GenericValue">[expectedValue]</OutArgument>
+                </ui:GetValue.Value>
+              </ui:GetValue>
+            </TryCatch.Try>
+            <TryCatch.Catches>
+              <Catch x:TypeArguments="ui:SelectorNotFoundException" sap2010:WorkflowViewState.IdRef="Catch`1_5">
+                <ActivityAction x:TypeArguments="ui:SelectorNotFoundException">
+                  <ActivityAction.Argument>
+                    <DelegateInArgument x:TypeArguments="ui:SelectorNotFoundException" Name="exception" />
+                  </ActivityAction.Argument>
+                  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_72">
+                    <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_143" Level="Error" Message="[item.ToString + &quot; button was not found&quot;]" />
+                    <Assign sap2010:WorkflowViewState.IdRef="Assign_7">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="ui:GenericValue">[elementNotPresent]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="ui:GenericValue">[True]</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                  </Sequence>
+                </ActivityAction>
+              </Catch>
+            </TryCatch.Catches>
+          </TryCatch>
+          <If Condition="[expectedValue = item.ToString]" sap2010:WorkflowViewState.IdRef="If_42">
+            <If.Then>
+              <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_144" Level="Info" Message="[item.ToString + &quot; text is correct&quot;]" />
+            </If.Then>
+            <If.Else>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_73">
+                <If Condition="[elementNotPresent = True]" sap2010:WorkflowViewState.IdRef="If_41">
+                  <If.Else>
+                    <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_145" Level="Error" Message="[item.ToString +&quot; text is &quot; + expectedValue + &quot; instead of &quot; + expectedValue]" />
+                  </If.Else>
+                </If>
+              </Sequence>
+            </If.Else>
+          </If>
+        </Sequence>
+      </ActivityAction>
+    </ui:ForEach.Body>
+    <sads:DebugSymbol.Symbol>dyVDOlxkb2N1bWVudGUgcHJvaWVjdGVcUUFcRm9yRWFjaC54YW1sFhgDWRACAQEYjgEYoAECARseCVUUAgECIwtGFgIBDUcLVBACAQMlDzAdAgEWOBNCHgIBDkcZRzoCAQRJD0mxAQIBCkwPUhoCAQUuQi5RAgEXJ4gBJ5sCAgEZORU5vQECARM6FUEeAgEPSX5JrgECAQtNEVEWAgEGOYUBOboBAgEUP0c/TQIBEjxIPFsCARBNH007AgEHTxVP6wECAQhPhQFP6AECAQk=</sads:DebugSymbol.Symbol>
+  </ui:ForEach>
+</Activity>
