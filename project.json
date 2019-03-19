@@ -7,7 +7,9 @@
     "UiPath.Excel.Activities": "[2.3.6682.26635]",
     "UiPath.Mail.Activities": "[1.1.6562.21018]",
     "UiPath.UIAutomation.Activities": "[18.4.2]",
-    "Microsoft.Activities": "[1.0.1]"
+    "Microsoft.Activities": "[1.0.1]",
+    "VaidotasKumza.PdfSharp.Activities": "[1.0.0.13]",
+    "BalaReva.Excel.Activities": "[17.0.0]"
   },
   "schemaVersion": "3.2",
   "studioVersion": "18.3.0.0",
