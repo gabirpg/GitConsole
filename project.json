@@ -3,13 +3,13 @@
   "description": "Blank Process",
   "main": "Main.xaml",
   "dependencies": {
-    "BalaReva.Excel.Activities": "[1.0.2]",
+    "BalaReva.Excel.Activities": "[3.0.1]",
     "Microsoft.Activities": "[1.0.1]",
     "UiPath.Excel.Activities": "[2.3.6682.26635]",
     "UiPath.Mail.Activities": "[1.1.6562.21018]",
     "UiPath.System.Activities": "[18.3.6848.19314]",
     "UiPath.UIAutomation.Activities": "[18.4.2]",
-    "VaidotasKumza.PdfSharp.Activities": "[1.0.0.3]"
+    "VaidotasKumza.PdfSharp.Activities": "[1.0.0.7]"
   },
   "schemaVersion": "3.2",
   "studioVersion": "18.3.0.0",
