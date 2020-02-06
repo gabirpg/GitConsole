@@ -1,0 +1,2 @@
+[http "https://domain.com"]
+	proxy = http://proxyUsername:proxyPassword@proxy.server.com:port
