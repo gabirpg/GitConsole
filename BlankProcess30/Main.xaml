@@ -1,4 +1,4 @@
-<Activity mc:Ignorable="sap sap2010" x:Class="Main" mva:VisualBasic.Settings="{x:Null}" sap:VirtualizedContainerService.HintSize="1084.8,552.8" sap2010:WorkflowViewState.IdRef="ActivityBuilder_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib" xmlns:uix="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Activity mc:Ignorable="sap sap2010" x:Class="Main" mva:VisualBasic.Settings="{x:Null}" sap:VirtualizedContainerService.HintSize="1084.8,560" sap2010:WorkflowViewState.IdRef="ActivityBuilder_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib" xmlns:uix="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System.Activities</x:String>
@@ -56,13 +56,13 @@
       <AssemblyReference>UiPath.OCR.Activities</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap:VirtualizedContainerService.HintSize="475.2,356" sap2010:WorkflowViewState.IdRef="Sequence_2">
+  <Sequence sap:VirtualizedContainerService.HintSize="475.2,395.2" sap2010:WorkflowViewState.IdRef="Sequence_2">
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <uix:NApplicationCard AttachMode="ByInstance" DisplayName="Use Application/Browser" sap:VirtualizedContainerService.HintSize="433.6,263.2" sap2010:WorkflowViewState.IdRef="NApplicationCard_1" Version="V1">
+    <uix:NApplicationCard AttachMode="ByInstance" DisplayName="Use Browser Chrome: eMAG.ro - Libertate în fiecare zi" sap:VirtualizedContainerService.HintSize="433.6,302.4" sap2010:WorkflowViewState.IdRef="NApplicationCard_1" InteractionMode="Simulate" UserDataFolderMode="CustomFolder" UserDataFolderPath="C:\git\BlankProcess30\UserDataFolder" Version="V1">
       <uix:NApplicationCard.Body>
         <ActivityAction x:TypeArguments="x:Object">
           <ActivityAction.Argument>
@@ -78,7 +78,7 @@
         </ActivityAction>
       </uix:NApplicationCard.Body>
       <uix:NApplicationCard.TargetApp>
-        <uix:TargetApp />
+        <uix:TargetApp BrowserType="Chrome" IconBase64="iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAAI0SURBVDhPddNPSBRRHAfwNVdXOgRJgYfIkzC/9yQ3IkswPUgLhXhbOzmLpYf+7CH1ki6U1iUIURRaC2JdJbW8uBdXmwIVL5YErXSpzEA7tKlF4qK58/o+d9Ze0/qD721+H+Z934xDnR+8+ECcnzyxzM8GPrDKaIx53r1mNbFp5n01SXX3I9RQ/pyu5VqP/zurvOQwEohz99IyP5P8yCoFAAFATLNaMUF15hg1fhuhG70D1HTMWksNFo8iT5Hkd+4WAEQGQAAQw+QX/dQ8+ZhuHU8v5yAPEBMRCmACWJ9jNWsAkjjCHhCiFtGntT7q1jpcEvAgcbmsAFuf+LmuBeY5BcA9xS7dwxtsqEBQC6z1aHcuSGAgvSyDDsRXfnr0My8/uPuKGJTojJIvqAIPtYDo1tqfSGDxf6A0jFvQcYR6dFA/w7x6lHQJmCMK0KV1vJfApgpYRzDtJaY7wC0owN2fEkhkAGy34N0PSEjgix1Y4aUrAF4AMAAYAAwABgADgAHAAPASQEQCQyogOwDwBiUWzbPqbNyCEx04x8nnwpeYD8AFIA9AHjrYvcaLyGoa2OuAV0wtsPM+vEEZOqiaIP32GDVERulqsXU5qcFSLtKJ2D6kCtnBDoBfOEICR5CfsnhG18cH6WaBtZ4aLB5BQshvG5ChRL8IU1NvkNqc1npqsHwI8aODGIDtfYAtdPAWgN5HbdnW6t/Z4JSF37kQwBXcQgjADIB5ALMAwijxMn5n5U90OP4AxlPE6YUy1qwAAAAASUVORK5CYII=" InformativeScreenshot="f3dac8b8097b9e554e70f4f13be74c73.png" Selector="&lt;html app='chrome.exe' title='eMAG.ro - Libertate în fiecare zi'/&gt;" Url="https://www.emag.ro/" />
       </uix:NApplicationCard.TargetApp>
     </uix:NApplicationCard>
   </Sequence>
