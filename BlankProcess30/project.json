@@ -1,16 +1,18 @@
 {
-  "name": "GitWithProxy_Process",
+  "name": "BlankProcess30",
   "description": "Blank Process",
   "main": "Main.xaml",
   "dependencies": {
-    "UiPath.System.Activities": "[19.2.0]",
-    "UiPath.UIAutomation.Activities": "[20.10.6]"
+    "UiPath.Excel.Activities": "[2.9.4-beta.1283604]",
+    "UiPath.Mail.Activities": "[1.9.4-beta.1287174]",
+    "UiPath.System.Activities": "[20.10.1]",
+    "UiPath.UIAutomation.Activities": "[20.12.0-alpha.1237838]"
   },
   "webServices": [],
   "entitiesStores": [],
   "schemaVersion": "4.0",
-  "studioVersion": "20.1.0.0",
-  "projectVersion": "1.0.40",
+  "studioVersion": "20.7.0.0",
+  "projectVersion": "1.0.0",
   "runtimeOptions": {
     "autoDispose": false,
     "isPausable": true,
@@ -35,13 +37,13 @@
       "ignoredFiles": []
     },
     "fileInfoCollection": [],
-    "modernBehavior": false
+    "modernBehavior": true
   },
   "expressionLanguage": "VisualBasic",
   "entryPoints": [
     {
       "filePath": "Main.xaml",
-      "uniqueId": "f5c09b40-c58f-45f6-bcbe-d1b9791e13b9",
+      "uniqueId": "bdfb0d12-c857-4d2b-927d-a34a791c6070",
       "input": [],
       "output": []
     }
