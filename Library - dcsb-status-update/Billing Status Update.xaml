@@ -1,0 +1,411 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Main" this:Main.in_InvoicedAmount="[0]" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data.Common" xmlns:this="clr-namespace:" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_InvoicePeriod_String" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_InvoicedAmount" Type="InArgument(x:Decimal)" />
+    <x:Property Name="in_BillingStatus" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_InvoiceGroupID" Type="InArgument(x:Int32)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_NowUTC" Type="InArgument(s:DateTime)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_DBConnection" Type="InArgument(ui:DatabaseConnection)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+  </x:Members>
+  <VisualBasic.Settings>
+    <x:Null />
+  </VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>1228,1675</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>ActivityBuilder_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <scg:List x:TypeArguments="x:String" Capacity="48">
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>UiPath.Database</x:String>
+    </scg:List>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="38">
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic.Core</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Collections</AssemblyReference>
+      <AssemblyReference>System.ComponentModel</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Primitives</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.TypeConverter</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.Common</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Linq</AssemblyReference>
+      <AssemblyReference>System.ObjectModel</AssemblyReference>
+      <AssemblyReference>System.Private.CoreLib</AssemblyReference>
+      <AssemblyReference>System.Private.Xml</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>UiPath.Database</AssemblyReference>
+      <AssemblyReference>UiPath.Database.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Workflow</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+    </scg:List>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap:VirtualizedContainerService.HintSize="719,1610" sap2010:WorkflowViewState.IdRef="Sequence_12">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="InvoiceMonth" />
+      <Variable x:TypeArguments="x:String" Name="NextMonth" />
+      <Variable x:TypeArguments="sd:DataTable" Name="dt_CurrentStatus" />
+      <Variable x:TypeArguments="x:String" Name="CurrentStatus" />
+      <Variable x:TypeArguments="ui:GenericValue" Name="LastInvoicedAmount" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <ui:MultipleAssign sap2010:Annotation.AnnotationText="Parse in_InvoicePeriod_String to month." DisplayName="Multiple Assign" sap:VirtualizedContainerService.HintSize="657,163" sap2010:WorkflowViewState.IdRef="MultipleAssign_2">
+      <ui:MultipleAssign.AssignOperations>
+        <scg:List x:TypeArguments="ui:AssignOperation" Capacity="4">
+          <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_3">
+            <ui:AssignOperation.To>
+              <OutArgument x:TypeArguments="x:String">[InvoiceMonth]</OutArgument>
+            </ui:AssignOperation.To>
+            <ui:AssignOperation.Value>
+              <InArgument x:TypeArguments="x:String">[Date.ParseExact(in_InvoicePeriod_String, "MM/yyyy",nothing).ToString("MMMM")]</InArgument>
+            </ui:AssignOperation.Value>
+          </ui:AssignOperation>
+          <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_4">
+            <ui:AssignOperation.To>
+              <OutArgument x:TypeArguments="x:String">[NextMonth]</OutArgument>
+            </ui:AssignOperation.To>
+            <ui:AssignOperation.Value>
+              <InArgument x:TypeArguments="x:String">[Now.AddMonths(+1).ToString("MMMM")]</InArgument>
+            </ui:AssignOperation.Value>
+          </ui:AssignOperation>
+        </scg:List>
+      </ui:MultipleAssign.AssignOperations>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:MultipleAssign>
+    <Sequence DisplayName="Check if new row is required in Billing_Status table." sap:VirtualizedContainerService.HintSize="657,81" sap2010:WorkflowViewState.IdRef="Sequence_11">
+      <Sequence.Variables>
+        <Variable x:TypeArguments="x:Int32" Name="ExistingRecords" />
+        <Variable x:TypeArguments="sd:DataTable" Name="dt_BillingStatus" />
+      </Sequence.Variables>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <ui:ExecuteQuery ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" CommandType="Text" DataTable="[dt_BillingStatus]" DisplayName="Execute Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="497,88" sap2010:WorkflowViewState.IdRef="ExecuteQuery_3" Sql="SELECT * From Billing_Status&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+        <ui:ExecuteQuery.Parameters>
+          <InArgument x:TypeArguments="x:String" x:Key="InvoiceGroupID">[in_InvoiceGroupID.ToString]</InArgument>
+        </ui:ExecuteQuery.Parameters>
+      </ui:ExecuteQuery>
+      <Switch x:TypeArguments="x:Int32" DisplayName="Switch" Expression="[If((dt_BillingStatus.Rows.Count = 0), 0, _&#xA;If((dt_BillingStatus.Rows.Count = 1), 1, _&#xA;-1))]" sap:VirtualizedContainerService.HintSize="497,362" sap2010:WorkflowViewState.IdRef="Switch`1_2">
+        <ui:ExecuteQuery ContinueOnError="{x:Null}" DataTable="{x:Null}" TimeoutMS="{x:Null}" x:Key="-1" sap2010:Annotation.AnnotationText="If duplicate rows are found, delete all rows and recreate a new row." CommandType="Text" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,130" sap2010:WorkflowViewState.IdRef="ExecuteQuery_4" Sql="DELETE Billing_Status&#xA;WHERE InvoiceGroupID = @InvoiceGroupID&#xA;INSERT Into [dbo].[Billing_Status]&#xA;           ([InvoiceGroupID&#xA;           ,[January]&#xA;           ,[February]&#xA;           ,[March]&#xA;           ,[April]&#xA;           ,[May]&#xA;           ,[June]&#xA;           ,[July]&#xA;           ,[August]&#xA;           ,[September]&#xA;           ,[October]&#xA;           ,[November]&#xA;           ,[December])&#xA;     VALUES&#xA;           (@InvoiceGroupID&#xA;           ,'Pending Billing Schedule'&#xA;           ,'Pending Billing Schedule'&#xA;           ,'Pending Billing Schedule'&#xA;           ,'Pending Billing Schedule'&#xA;           ,'Pending Billing Schedule'&#xA;           ,'Pending Billing Schedule'&#xA;           ,'Pending Billing Schedule'&#xA;           ,'Pending Billing Schedule'&#xA;           ,'Pending Billing Schedule'&#xA;           ,'Pending Billing Schedule'&#xA;           ,'Pending Billing Schedule'&#xA;           ,'Pending Billing Schedule')">
+          <ui:ExecuteQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="InvoiceGroupID">[in_InvoiceGroupID.ToString]</InArgument>
+          </ui:ExecuteQuery.Parameters>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </ui:ExecuteQuery>
+        <x:Null x:Key="1" />
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="0" sap2010:Annotation.AnnotationText="Insert a new row for the InvoiceGroupID." CommandType="Text" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,119" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_11" Sql="INSERT INTO [dbo].[Billing_Status]&#xA;           ([InvoiceGroupID]&#xA;           ,[January]&#xA;           ,[February]&#xA;           ,[March]&#xA;           ,[April]&#xA;           ,[May]&#xA;           ,[June]&#xA;           ,[July]&#xA;           ,[August]&#xA;           ,[September]&#xA;           ,[October]&#xA;           ,[November]&#xA;           ,[December]&#xA;&#x9;&#x9;   ,[LastUpdatedUTC]&#xA;&#x9;&#x9;   ,[LastInvoicedAmount])&#xA;     VALUES&#xA;           (@InvoiceGroupID&#xA;           ,'Pending Billing Schedule'&#xA;           ,'Pending Billing Schedule'&#xA;           ,'Pending Billing Schedule'&#xA;           ,'Pending Billing Schedule'&#xA;           ,'Pending Billing Schedule'&#xA;           ,'Pending Billing Schedule'&#xA;           ,'Pending Billing Schedule'&#xA;           ,'Pending Billing Schedule'&#xA;           ,'Pending Billing Schedule'&#xA;           ,'Pending Billing Schedule'&#xA;           ,'Pending Billing Schedule'&#xA;           ,'Pending Billing Schedule'&#xA;&#x9;&#x9;   ,@LastUpdatedUTC&#xA;&#x9;&#x9;   ,0)">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </ui:ExecuteNonQuery>
+      </Switch>
+    </Sequence>
+    <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" sap2010:Annotation.AnnotationText="Set default value for next month to &quot;Pending Billing Schedule&quot;" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="657,109" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_12" Sql="[&quot;UPDATE Billing_Status &quot;+&#xA;&quot;SET &quot; + NextMonth + &quot; = 'Pending Billing Schedule' &quot; +&#xA;&quot;WHERE InvoiceGroupID = @InvoiceGroupID&quot;]">
+      <ui:ExecuteNonQuery.Parameters>
+        <InArgument x:TypeArguments="x:String" x:Key="NextMonth">[NextMonth]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="InvoiceGroupID">[in_InvoiceGroupID.ToString]</InArgument>
+      </ui:ExecuteNonQuery.Parameters>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:ExecuteNonQuery>
+    <ui:ExecuteQuery ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" CommandType="Text" DataTable="[dt_CurrentStatus]" DisplayName="Execute Query - Get Current Status" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="657,89" sap2010:WorkflowViewState.IdRef="ExecuteQuery_5" Sql="[&quot;Select &quot; + InvoiceMonth + &quot; As CurrentStatus &quot;+&#xA;&quot;  ,LastInvoicedAmount &quot;+&#xA;&quot;From Billing_Status &quot;+&#xA;&quot;Where InvoiceGroupID = &quot; + in_InvoiceGroupID.ToString]">
+      <ui:ExecuteQuery.Parameters>
+        <scg:Dictionary x:TypeArguments="x:String, Argument" />
+      </ui:ExecuteQuery.Parameters>
+    </ui:ExecuteQuery>
+    <ui:MultipleAssign DisplayName="Multiple Assign" sap:VirtualizedContainerService.HintSize="657,129" sap2010:WorkflowViewState.IdRef="MultipleAssign_3">
+      <ui:MultipleAssign.AssignOperations>
+        <scg:List x:TypeArguments="ui:AssignOperation" Capacity="4">
+          <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_5">
+            <ui:AssignOperation.To>
+              <OutArgument x:TypeArguments="x:String">[CurrentStatus]</OutArgument>
+            </ui:AssignOperation.To>
+            <ui:AssignOperation.Value>
+              <InArgument x:TypeArguments="x:String">[dt_CurrentStatus.Rows(0)("CurrentStatus").ToString]</InArgument>
+            </ui:AssignOperation.Value>
+          </ui:AssignOperation>
+          <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_6">
+            <ui:AssignOperation.To>
+              <OutArgument x:TypeArguments="ui:GenericValue">[LastInvoicedAmount]</OutArgument>
+            </ui:AssignOperation.To>
+            <ui:AssignOperation.Value>
+              <InArgument x:TypeArguments="ui:GenericValue">[cdec(dt_CurrentStatus.Rows(0)("LastInvoicedAmount"))]</InArgument>
+            </ui:AssignOperation.Value>
+          </ui:AssignOperation>
+        </scg:List>
+      </ui:MultipleAssign.AssignOperations>
+    </ui:MultipleAssign>
+    <Switch x:TypeArguments="x:String" DisplayName="Switch" Expression="[If((CurrentStatus = in_BillingStatus),&quot;Default&quot;, _&#xA;If((CurrentStatus &lt;&gt; in_BillingStatus And in_InvoicedAmount &gt; 0),&quot;Update With Invoiced Amount&quot;, _&#xA;If((CurrentStatus &lt;&gt; in_BillingStatus And in_InvoicedAmount = 0),&quot;Update Without Invoiced Amount&quot;, _&#xA;&quot;Default&quot;)))]" sap:VirtualizedContainerService.HintSize="657,728" sap2010:WorkflowViewState.IdRef="Switch`1_7">
+      <Switch x:TypeArguments="x:String" x:Key="Update With Invoiced Amount" DisplayName="Switch - Status with LastInvoicedAmount" Expression="[If((InvoiceMonth = &quot;January&quot;), &quot;January&quot;, _ &#xA;If((InvoiceMonth = &quot;February&quot;), &quot;February&quot;, _ &#xA;If((InvoiceMonth = &quot;March&quot;), &quot;March&quot;, _ &#xA;If((InvoiceMonth = &quot;April&quot;), &quot;April&quot;, _ &#xA;If((InvoiceMonth = &quot;May&quot;), &quot;May&quot;, _ &#xA;If((InvoiceMonth = &quot;June&quot;), &quot;June&quot;, _ &#xA;If((InvoiceMonth = &quot;July&quot;), &quot;July&quot;, _ &#xA;If((InvoiceMonth = &quot;August&quot;), &quot;August&quot;, _ &#xA;If((InvoiceMonth = &quot;September&quot;), &quot;September&quot;, _ &#xA;If((InvoiceMonth = &quot;October&quot;), &quot;October&quot;, _ &#xA;If((InvoiceMonth = &quot;November&quot;), &quot;November&quot;, _ &#xA;If((InvoiceMonth = &quot;December&quot;), &quot;December&quot;, _ &#xA;&quot;Default&quot;))))))))))))]" sap:VirtualizedContainerService.HintSize="497,518" sap2010:WorkflowViewState.IdRef="Switch`1_5">
+        <Switch.Default>
+          <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="334,93" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Error" Message="[&quot;Billing status is invalid, Billing status for InvoiceGroupID &quot; + in_InvoiceGroupID.ToString + &quot; not updated in Billing_Status table.&quot;]" />
+        </Switch.Default>
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="January" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,88" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_37" Sql="UPDATE Billing_Status&#xA;&#x9;SET January = @Status&#xA;&#x9;&#x9;,LastInvoicedAmount = @LastInvoicedAmount&#xA;&#x9;&#x9;,LastUpdatedUTC = @LastUpdatedUTC&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="Status">[in_BillingStatus]</InArgument>
+            <InArgument x:TypeArguments="x:Decimal" x:Key="LastInvoicedAmount">[in_InvoicedAmount]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+        </ui:ExecuteNonQuery>
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="February" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,88" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_38" Sql="UPDATE Billing_Status&#xA;&#x9;SET February = @Status&#xA;&#x9;&#x9;,LastInvoicedAmount = @LastInvoicedAmount&#xA;&#x9;&#x9;,LastUpdatedUTC = @LastUpdatedUTC&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="Status">[in_BillingStatus]</InArgument>
+            <InArgument x:TypeArguments="x:Decimal" x:Key="LastInvoicedAmount">[in_InvoicedAmount]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+        </ui:ExecuteNonQuery>
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="March" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,88" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_39" Sql="UPDATE Billing_Status&#xA;&#x9;SET March = @Status&#xA;&#x9;&#x9;,LastInvoicedAmount = @LastInvoicedAmount&#xA;&#x9;&#x9;,LastUpdatedUTC = @LastUpdatedUTC&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="Status">[in_BillingStatus]</InArgument>
+            <InArgument x:TypeArguments="x:Decimal" x:Key="LastInvoicedAmount">[in_InvoicedAmount]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+        </ui:ExecuteNonQuery>
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="April" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,88" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_40" Sql="UPDATE Billing_Status&#xA;&#x9;SET April = @Status&#xA;&#x9;&#x9;,LastInvoicedAmount = @LastInvoicedAmount&#xA;&#x9;&#x9;,LastUpdatedUTC = @LastUpdatedUTC&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="Status">[in_BillingStatus]</InArgument>
+            <InArgument x:TypeArguments="x:Decimal" x:Key="LastInvoicedAmount">[in_InvoicedAmount]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+        </ui:ExecuteNonQuery>
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="May" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,88" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_41" Sql="UPDATE Billing_Status&#xA;&#x9;SET May = @Status&#xA;&#x9;&#x9;,LastInvoicedAmount = @LastInvoicedAmount&#xA;&#x9;&#x9;,LastUpdatedUTC = @LastUpdatedUTC&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="Status">[in_BillingStatus]</InArgument>
+            <InArgument x:TypeArguments="x:Decimal" x:Key="LastInvoicedAmount">[in_InvoicedAmount]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+        </ui:ExecuteNonQuery>
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="June" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,88" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_42" Sql="UPDATE Billing_Status&#xA;&#x9;SET June = @Status&#xA;&#x9;&#x9;,LastInvoicedAmount = @LastInvoicedAmount&#xA;&#x9;&#x9;,LastUpdatedUTC = @LastUpdatedUTC&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="Status">[in_BillingStatus]</InArgument>
+            <InArgument x:TypeArguments="x:Decimal" x:Key="LastInvoicedAmount">[in_InvoicedAmount]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+        </ui:ExecuteNonQuery>
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="July" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,88" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_43" Sql="UPDATE Billing_Status&#xA;&#x9;SET July = @Status&#xA;&#x9;&#x9;,LastInvoicedAmount = @LastInvoicedAmount&#xA;&#x9;&#x9;,LastUpdatedUTC = @LastUpdatedUTC&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="Status">[in_BillingStatus]</InArgument>
+            <InArgument x:TypeArguments="x:Decimal" x:Key="LastInvoicedAmount">[in_InvoicedAmount]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+        </ui:ExecuteNonQuery>
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="August" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,88" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_44" Sql="UPDATE Billing_Status&#xA;&#x9;SET August = @Status&#xA;&#x9;&#x9;,LastInvoicedAmount = @LastInvoicedAmount&#xA;&#x9;&#x9;,LastUpdatedUTC = @LastUpdatedUTC&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="Status">[in_BillingStatus]</InArgument>
+            <InArgument x:TypeArguments="x:Decimal" x:Key="LastInvoicedAmount">[in_InvoicedAmount]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+        </ui:ExecuteNonQuery>
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="September" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,88" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_45" Sql="UPDATE Billing_Status&#xA;&#x9;SET September = @Status&#xA;&#x9;&#x9;,LastInvoicedAmount = @LastInvoicedAmount&#xA;&#x9;&#x9;,LastUpdatedUTC = @LastUpdatedUTC&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="Status">[in_BillingStatus]</InArgument>
+            <InArgument x:TypeArguments="x:Decimal" x:Key="LastInvoicedAmount">[in_InvoicedAmount]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+        </ui:ExecuteNonQuery>
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="October" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,88" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_46" Sql="UPDATE Billing_Status&#xA;&#x9;SET October = @Status&#xA;&#x9;&#x9;,LastInvoicedAmount = @LastInvoicedAmount&#xA;&#x9;&#x9;,LastUpdatedUTC = @LastUpdatedUTC&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="Status">[in_BillingStatus]</InArgument>
+            <InArgument x:TypeArguments="x:Decimal" x:Key="LastInvoicedAmount">[in_InvoicedAmount]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+        </ui:ExecuteNonQuery>
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="November" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,88" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_47" Sql="UPDATE Billing_Status&#xA;&#x9;SET November = @Status&#xA;&#x9;&#x9;,LastInvoicedAmount = @LastInvoicedAmount&#xA;&#x9;&#x9;,LastUpdatedUTC = @LastUpdatedUTC&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="Status">[in_BillingStatus]</InArgument>
+            <InArgument x:TypeArguments="x:Decimal" x:Key="LastInvoicedAmount">[in_InvoicedAmount]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+        </ui:ExecuteNonQuery>
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="December" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,88" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_48" Sql="UPDATE Billing_Status&#xA;&#x9;SET December = @Status&#xA;&#x9;&#x9;,LastInvoicedAmount = @LastInvoicedAmount&#xA;&#x9;&#x9;,LastUpdatedUTC = @LastUpdatedUTC&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="Status">[in_BillingStatus]</InArgument>
+            <InArgument x:TypeArguments="x:Decimal" x:Key="LastInvoicedAmount">[in_InvoicedAmount]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+        </ui:ExecuteNonQuery>
+      </Switch>
+      <Switch x:TypeArguments="x:String" x:Key="Update Without Invoiced Amount" DisplayName="Switch - Status without LastInvoicedAmount" Expression="[If((InvoiceMonth = &quot;January&quot;), &quot;January&quot;, _ &#xA;If((InvoiceMonth = &quot;February&quot;), &quot;February&quot;, _ &#xA;If((InvoiceMonth = &quot;March&quot;), &quot;March&quot;, _ &#xA;If((InvoiceMonth = &quot;April&quot;), &quot;April&quot;, _ &#xA;If((InvoiceMonth = &quot;May&quot;), &quot;May&quot;, _ &#xA;If((InvoiceMonth = &quot;June&quot;), &quot;June&quot;, _ &#xA;If((InvoiceMonth = &quot;July&quot;), &quot;July&quot;, _ &#xA;If((InvoiceMonth = &quot;August&quot;), &quot;August&quot;, _ &#xA;If((InvoiceMonth = &quot;September&quot;), &quot;September&quot;, _ &#xA;If((InvoiceMonth = &quot;October&quot;), &quot;October&quot;, _ &#xA;If((InvoiceMonth = &quot;November&quot;), &quot;November&quot;, _ &#xA;If((InvoiceMonth = &quot;December&quot;), &quot;December&quot;, _ &#xA;&quot;Default&quot;))))))))))))]" sap:VirtualizedContainerService.HintSize="497,518" sap2010:WorkflowViewState.IdRef="Switch`1_6">
+        <Switch.Default>
+          <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Error" Message="[&quot;Billing status is invalid, Billing status for InvoiceGroupID &quot; + in_InvoiceGroupID.ToString + &quot; not updated in Billing_Status table.&quot;]" />
+        </Switch.Default>
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="January" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,88" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_49" Sql="UPDATE Billing_Status&#xA;&#x9;SET January = @Status&#xA;&#x9;&#x9;,LastUpdatedUTC = @LastUpdatedUTC&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="Status">[in_BillingStatus]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+        </ui:ExecuteNonQuery>
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="February" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,88" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_50" Sql="UPDATE Billing_Status&#xA;&#x9;SET February = @Status&#xA;&#x9;&#x9;,LastUpdatedUTC = @LastUpdatedUTC&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="Status">[in_BillingStatus]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+        </ui:ExecuteNonQuery>
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="March" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,88" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_51" Sql="UPDATE Billing_Status&#xA;&#x9;SET March = @Status&#xA;&#x9;&#x9;,LastUpdatedUTC = @LastUpdatedUTC&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="Status">[in_BillingStatus]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+        </ui:ExecuteNonQuery>
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="April" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,88" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_52" Sql="UPDATE Billing_Status&#xA;&#x9;SET April = @Status&#xA;&#x9;&#x9;,LastUpdatedUTC = @LastUpdatedUTC&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="Status">[in_BillingStatus]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+        </ui:ExecuteNonQuery>
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="May" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,88" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_53" Sql="UPDATE Billing_Status&#xA;&#x9;SET May = @Status&#xA;&#x9;&#x9;,LastUpdatedUTC = @LastUpdatedUTC&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="Status">[in_BillingStatus]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+        </ui:ExecuteNonQuery>
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="June" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,88" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_54" Sql="UPDATE Billing_Status&#xA;&#x9;SET June = @Status&#xA;&#x9;&#x9;,LastUpdatedUTC = @LastUpdatedUTC&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="Status">[in_BillingStatus]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+        </ui:ExecuteNonQuery>
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="July" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,88" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_55" Sql="UPDATE Billing_Status&#xA;&#x9;SET July = @Status&#xA;&#x9;&#x9;,LastUpdatedUTC = @LastUpdatedUTC&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="Status">[in_BillingStatus]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+        </ui:ExecuteNonQuery>
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="August" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,88" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_56" Sql="UPDATE Billing_Status&#xA;&#x9;SET August = @Status&#xA;&#x9;&#x9;,LastUpdatedUTC = @LastUpdatedUTC&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="Status">[in_BillingStatus]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+        </ui:ExecuteNonQuery>
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="September" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,88" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_57" Sql="UPDATE Billing_Status&#xA;&#x9;SET September = @Status&#xA;&#x9;&#x9;,LastUpdatedUTC = @LastUpdatedUTC&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="Status">[in_BillingStatus]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+        </ui:ExecuteNonQuery>
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="October" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,88" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_58" Sql="UPDATE Billing_Status&#xA;&#x9;SET October = @Status&#xA;&#x9;&#x9;,LastUpdatedUTC = @LastUpdatedUTC&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="Status">[in_BillingStatus]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+        </ui:ExecuteNonQuery>
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="November" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,88" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_59" Sql="UPDATE Billing_Status&#xA;&#x9;SET November = @Status&#xA;&#x9;&#x9;,LastUpdatedUTC = @LastUpdatedUTC&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="Status">[in_BillingStatus]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+        </ui:ExecuteNonQuery>
+        <ui:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" x:Key="December" CommandType="Text" DisplayName="Execute Non Query" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="334,88" sap2010:WorkflowViewState.IdRef="ExecuteNonQuery_60" Sql="UPDATE Billing_Status&#xA;&#x9;SET December = @Status&#xA;&#x9;&#x9;,LastUpdatedUTC = @LastUpdatedUTC&#xA;WHERE InvoiceGroupID = @InvoiceGroupID">
+          <ui:ExecuteNonQuery.Parameters>
+            <InArgument x:TypeArguments="x:String" x:Key="Status">[in_BillingStatus]</InArgument>
+            <InArgument x:TypeArguments="s:DateTime" x:Key="LastUpdatedUTC">[in_NowUTC]</InArgument>
+            <InArgument x:TypeArguments="x:Int32" x:Key="InvoiceGroupID">[in_InvoiceGroupID]</InArgument>
+          </ui:ExecuteNonQuery.Parameters>
+        </ui:ExecuteNonQuery>
+      </Switch>
+    </Switch>
+  </Sequence>
+</Activity>

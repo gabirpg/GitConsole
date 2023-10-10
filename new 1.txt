@@ -1,2 +1,0 @@
-var xamlType = newViewModelPair.LeftViewModel.Properties.First().Type;
-var propertyType = newViewModelPair.LeftViewModel.PropertyInfo.PropertyType;

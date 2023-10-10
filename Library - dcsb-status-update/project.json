@@ -1,19 +1,17 @@
 {
-  "name": "Process_Portable_VB_GlobalVariables",
-  "description": "Blank Process",
-  "main": "Main.xaml",
+  "name": "DCSB Status Update",
+  "projectId": "6e73759a-7d20-4f18-8e21-faf06f1e301a",
+  "description": "Billing Status Update Library",
+  "main": "NewActivity.xaml",
   "dependencies": {
-    "UiPath.Excel.Activities": "[2.11.3]",
-    "UiPath.Mail.Activities": "[1.12.1]",
-    "UiPath.System.Activities": "[22.10.4]",
-    "UiPath.Testing.Activities": "[22.10.3]",
-    "UiPath.UIAutomation.Activities": "[22.10.4]"
+    "UiPath.Database.Activities": "1.7.1",
+    "UiPath.System.Activities": "23.4.2"
   },
   "webServices": [],
   "entitiesStores": [],
   "schemaVersion": "4.0",
-  "studioVersion": "23.4.0.0",
-  "projectVersion": "1.0.1",
+  "studioVersion": "19.10.4.0",
+  "projectVersion": "5.0.1",
   "runtimeOptions": {
     "autoDispose": false,
     "netFrameworkLazyLoading": false,
@@ -29,12 +27,12 @@
     "executionType": "Workflow",
     "readyForPiP": false,
     "startsInPiP": false,
-    "mustRestoreAllDependencies": true,
+    "mustRestoreAllDependencies": false,
     "pipType": "ChildSession"
   },
   "designOptions": {
     "projectProfile": "Developement",
-    "outputType": "Process",
+    "outputType": "Library",
     "libraryOptions": {
       "includeOriginalXaml": false,
       "privateWorkflows": []
@@ -43,17 +41,10 @@
       "ignoredFiles": []
     },
     "fileInfoCollection": [],
-    "modernBehavior": true
+    "modernBehavior": false,
+    "saveToCloud": false
   },
   "expressionLanguage": "VisualBasic",
-  "entryPoints": [
-    {
-      "filePath": "Main.xaml",
-      "uniqueId": "1f718537-5ff3-4a7e-9d73-92045a8fbc4c",
-      "input": [],
-      "output": []
-    }
-  ],
   "isTemplate": false,
   "templateProjectData": {},
   "publishData": {},
