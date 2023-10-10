@@ -1,5 +1,6 @@
 {
   "name": "BlankProcess",
+  "projectId": "a359ca4e-9d23-43aa-aeff-65345bc8b646",
   "description": "Blank Process",
   "main": "Main.xaml",
   "dependencies": {
@@ -43,7 +44,8 @@
       "ignoredFiles": []
     },
     "fileInfoCollection": [],
-    "modernBehavior": true
+    "modernBehavior": true,
+    "saveToCloud": false
   },
   "expressionLanguage": "VisualBasic",
   "entryPoints": [
